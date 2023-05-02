@@ -4,7 +4,6 @@ import './components/styles/ConnectWallet.css';
 import { Board } from './components/Board/Board';
 import { ScoreBoard } from './components/Board/ScoreBoard';
 import { ResetButton } from './components/ResetButton';
-// import { ConnectWallet } from './components/ConnectWallet'; // this is a component not a pera wallet
 import { Logo } from './components/Logo';
 import algosdk, { waitForConfirmation } from 'algosdk';
 import { PeraWalletConnect } from '@perawallet/connect';
@@ -20,16 +19,13 @@ const algod = new algosdk.Algodv2(
 function App() {
   const [board, setBoard] = useState(Array(9).fill(null));
   const [xPlaying, setXPlaying] = useState(true);
-  // const [scores, setScores] = useState({ xScore: 0, oScore: 0 });
   const [gameOver, setGameOver] = useState(false);
   const [count1, setCount1] = useState(0);
   const [count2, setCount2] = useState(0);
-  // const [localCount, setLocalCount] = useState(null);
   const [accountAddress, setAccountAddress] = useState(null);
   const isConnectedToPeraWallet = !!accountAddress;
 
   useEffect(() => {
-    // Reconnect to the session when the component is mounted
     peraWallet
       .reconnectSession()
       .then((accounts) => {
@@ -85,27 +81,13 @@ function App() {
     const winner = checkWinner(updatedBoard);
     if (winner) {
       if (winner === 'O') {
-        // setCount2((prevCount2) => prevCount2 + 1);
         increaseScore('scorePlayer1');
       }
       if (winner === 'X') {
-        // setCount1((prevCount1) => prevCount1 + 1);
         increaseScore('scorePlayer2');
       }
       console.log(`The is winner is ${winner}`);
     }
-
-    // if (winner) {
-    //   if (winner === 'O') {
-    //     let { oScore } = scores;
-    //     oScore += 1;
-    //     setScores({ ...scores, oScore });
-    //   } else {
-    //     let { xScore } = scores;
-    //     xScore += 1;
-    //     setScores({ ...scores, xScore });
-    //   }
-    // }
 
     setBoard(updatedBoard);
     setXPlaying(!xPlaying);
@@ -194,7 +176,6 @@ function App() {
   }
   async function increaseScore(action) {
     try {
-      // get suggested params
       const suggestedParams = await algod.getTransactionParams().do();
       const appArgs = [new Uint8Array(Buffer.from(action))];
 
